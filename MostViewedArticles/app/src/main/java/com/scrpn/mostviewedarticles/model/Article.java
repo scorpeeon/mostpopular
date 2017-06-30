@@ -14,13 +14,17 @@ public class Article {
     @SerializedName("abstract")
     private String abstractText;
 
+    @SerializedName("byline")
+    private String byLine;
+
     @SerializedName("published_date")
     private Date publishedDate;
 
-    public Article(String url, String title, String abstractText, Date publishedDate) {
+    public Article(String url, String title, String abstractText, String byLine, Date publishedDate) {
         this.url = url;
         this.title = title;
         this.abstractText = abstractText;
+        this.byLine = byLine;
         this.publishedDate = publishedDate;
     }
 
@@ -35,6 +39,10 @@ public class Article {
 
     public String getAbstractText() {
         return abstractText;
+    }
+
+    public String getByLine() {
+        return byLine;
     }
 
     public Date getPublishedDate() {

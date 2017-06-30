@@ -52,6 +52,8 @@ public class ArticleDetailActivity extends AppCompatActivity {
                     getIntent().getStringExtra(ArticleDetailFragment.ARG_ARTICLE_TITLE));
             arguments.putString(ArticleDetailFragment.ARG_ARTICLE_ABSTRACT,
                     getIntent().getStringExtra(ArticleDetailFragment.ARG_ARTICLE_ABSTRACT));
+            arguments.putString(ArticleDetailFragment.ARG_ARTICLE_BYLINE,
+                    getIntent().getStringExtra(ArticleDetailFragment.ARG_ARTICLE_BYLINE));
             arguments.putSerializable(ArticleDetailFragment.ARG_ARTICLE_DATE,
                     getIntent().getSerializableExtra(ArticleDetailFragment.ARG_ARTICLE_DATE));
             ArticleDetailFragment fragment = new ArticleDetailFragment();

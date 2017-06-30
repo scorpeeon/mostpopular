@@ -28,6 +28,7 @@ public class ArticleDetailFragment extends Fragment {
     public static final String ARG_ARTICLE_TITLE = "article_title";
     public static final String ARG_ARTICLE_ABSTRACT = "article_abstract";
     public static final String ARG_ARTICLE_DATE = "article_date";
+    public static final String ARG_ARTICLE_BYLINE = "article_byline";
 
     /**
      * The dummy content this fragment is presenting.
@@ -46,12 +47,14 @@ public class ArticleDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments().containsKey(ARG_ARTICLE_URL) && getArguments().containsKey(ARG_ARTICLE_TITLE) &&
-                getArguments().containsKey(ARG_ARTICLE_ABSTRACT) && getArguments().containsKey(ARG_ARTICLE_DATE)) {
+                getArguments().containsKey(ARG_ARTICLE_ABSTRACT) && getArguments().containsKey(ARG_ARTICLE_BYLINE) &&
+                getArguments().containsKey(ARG_ARTICLE_DATE)) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
             article = new Article(getArguments().getString(ARG_ARTICLE_URL), getArguments().getString(ARG_ARTICLE_TITLE),
-                    getArguments().getString(ARG_ARTICLE_ABSTRACT), (Date)getArguments().getSerializable(ARG_ARTICLE_DATE));
+                    getArguments().getString(ARG_ARTICLE_ABSTRACT), getArguments().getString(ARG_ARTICLE_BYLINE),
+                    (Date)getArguments().getSerializable(ARG_ARTICLE_DATE));
         }
     }
 

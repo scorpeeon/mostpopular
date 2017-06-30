@@ -35,7 +35,9 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<ArticleRecy
     public void onBindViewHolder(final ArticleRecyclerViewAdapter.ViewHolder holder, int position) {
         holder.article = articles.get(position);
         //holder.mIdView.setText(articles.get(position).getPublishedDate().toString());
-        holder.mContentView.setText(articles.get(position).getTitle());
+        holder.titleView.setText(articles.get(position).getTitle());
+        holder.bylineView.setText(articles.get(position).getByLine());
+        holder.dateView.setText(articles.get(position).getPublishedDate().toString());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +56,7 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<ArticleRecy
                     intent.putExtra(ArticleDetailFragment.ARG_ARTICLE_URL, holder.article.getUrl());
                     intent.putExtra(ArticleDetailFragment.ARG_ARTICLE_TITLE, holder.article.getTitle());
                     intent.putExtra(ArticleDetailFragment.ARG_ARTICLE_ABSTRACT, holder.article.getAbstractText());
+                    intent.putExtra(ArticleDetailFragment.ARG_ARTICLE_BYLINE, holder.article.getByLine());
                     intent.putExtra(ArticleDetailFragment.ARG_ARTICLE_DATE, holder.article.getPublishedDate());
 
                     context.startActivity(intent);
@@ -69,20 +72,22 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<ArticleRecy
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
+        public final TextView titleView;
+        public final TextView bylineView;
+        public final TextView dateView;
         public Article article;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            titleView = (TextView) view.findViewById(R.id.list_title);
+            bylineView = (TextView) view.findViewById(R.id.list_byline);
+            dateView = (TextView) view.findViewById(R.id.list_date);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + dateView.getText() + "'";
         }
     }
 }
