@@ -53,15 +53,6 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<ArticleRecy
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (mTwoPane) {
-//                    Bundle arguments = new Bundle();
-//                    arguments.putString(ArticleDetailFragment.ARG_ITEM_ID, holder.article.id);
-//                    ArticleDetailFragment fragment = new ArticleDetailFragment();
-//                    fragment.setArguments(arguments);
-//                    getSupportFragmentManager().beginTransaction()
-//                            .replace(R.id.article_detail_container, fragment)
-//                            .commit();
-//                } else {
                     Context context = v.getContext();
                     Intent intent = new Intent(context, ArticleDetailActivity.class);
                     intent.putExtra(ArticleDetailFragment.ARG_ARTICLE_URL, holder.article.getUrl());
@@ -71,7 +62,6 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<ArticleRecy
                     intent.putExtra(ArticleDetailFragment.ARG_ARTICLE_DATE, holder.article.getPublishedDate());
 
                     context.startActivity(intent);
-//                }
             }
         });
     }

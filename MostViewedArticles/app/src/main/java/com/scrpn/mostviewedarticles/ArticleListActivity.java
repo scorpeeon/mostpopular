@@ -45,7 +45,7 @@ public class ArticleListActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
 
     private final static String TAG = "ArticleListActivity";
-    private static String API_KEY = ""; // TODO
+    private static String API_KEY = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,10 +81,8 @@ public class ArticleListActivity extends AppCompatActivity {
             mTwoPane = true;
         }
 
-        /////
-
         if (API_KEY.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "Please obtain your API KEY first from themoviedb.org", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.api_key_needed), Toast.LENGTH_LONG).show();
             return;
         }
 
