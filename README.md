@@ -9,3 +9,4 @@ http://developer.nytimes.com/
 The API KEY must be set in the config.xml resource file under the string "nytimes_api_key".
 
 This application is unfinished, it lacks RTL language support and still needs to appropriately acknowledge all of the used third party libraries and their licenses.
+Also MVP architecture was not used due to lack of time.

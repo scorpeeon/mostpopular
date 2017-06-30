@@ -112,9 +112,7 @@ public class ArticleListActivity extends AppCompatActivity {
                 int statusCode = response.code();
                 if(statusCode == HttpURLConnection.HTTP_OK) {
                     List<Article> articles = response.body().getArticles();
-                    Log.d(TAG, "Number of movies received: " + articles.size());
-                    //recyclerView.setAdapter(new MoviesAdapter(movies, R.layout.list_item_movie, getApplicationContext()));
-                    recyclerView.setAdapter(new ArticleRecyclerViewAdapter(articles));
+                    recyclerView.setAdapter(new ArticleRecyclerViewAdapter(articles, ArticleListActivity.this));
                 }
             }
 

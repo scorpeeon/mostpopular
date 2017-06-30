@@ -7,9 +7,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.scrpn.mostviewedarticles.model.Article;
+import com.squareup.picasso.Picasso;
 
 import java.util.Date;
 import java.util.List;
@@ -20,8 +22,9 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<ArticleRecy
     private int rowLayout;
     private Context context;
 
-    public ArticleRecyclerViewAdapter(List<Article> articles) {
+    public ArticleRecyclerViewAdapter(List<Article> articles, Context context) {
         this.articles = articles;
+        this.context = context;
     }
 
     @Override
@@ -35,6 +38,11 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<ArticleRecy
     public void onBindViewHolder(final ArticleRecyclerViewAdapter.ViewHolder holder, int position) {
         holder.article = articles.get(position);
         //holder.mIdView.setText(articles.get(position).getPublishedDate().toString());
+        if(articles.get(position).getMedia() != null && !articles.get(position).getMedia().isEmpty() &&
+                articles.get(position).getMedia().get(0).getMediaMetaDatas() != null &&
+                !articles.get(position).getMedia().get(0).getMediaMetaDatas().isEmpty()) {
+            Picasso.with(context).load(articles.get(position).getMedia().get(0).getMediaMetaDatas().get(0).getUrl()).into(holder.imageView);
+        }
         holder.titleView.setText(articles.get(position).getTitle());
         holder.bylineView.setText(articles.get(position).getByLine());
         holder.dateView.setText(articles.get(position).getPublishedDate().toString());
@@ -72,6 +80,7 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<ArticleRecy
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
+        public final ImageView imageView;
         public final TextView titleView;
         public final TextView bylineView;
         public final TextView dateView;
@@ -80,6 +89,7 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<ArticleRecy
         public ViewHolder(View view) {
             super(view);
             mView = view;
+            imageView = (ImageView) view.findViewById(R.id.imageView);
             titleView = (TextView) view.findViewById(R.id.list_title);
             bylineView = (TextView) view.findViewById(R.id.list_byline);
             dateView = (TextView) view.findViewById(R.id.list_date);

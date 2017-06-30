@@ -20,6 +20,9 @@ public class Article {
     @SerializedName("published_date")
     private Date publishedDate;
 
+    @SerializedName("media")
+    private MediaList media;
+
     public Article(String url, String title, String abstractText, String byLine, Date publishedDate) {
         this.url = url;
         this.title = title;
@@ -47,5 +50,9 @@ public class Article {
 
     public Date getPublishedDate() {
         return publishedDate;
+    }
+
+    public MediaList getMedia() {
+        return media;
     }
 }

@@ -5,13 +5,12 @@
     android:layout_height="wrap_content">
 
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        app:srcCompat="@android:drawable/ic_popup_sync" />
+        android:layout_centerVertical="true" />
 
     <LinearLayout
         android:layout_width="0dp"
