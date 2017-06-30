@@ -1,6 +1,7 @@
 package com.scrpn.mostviewedarticles;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +17,7 @@ import com.scrpn.mostviewedarticles.model.ArticleResponse;
 import com.scrpn.mostviewedarticles.network.ApiClient;
 import com.scrpn.mostviewedarticles.network.ApiInterface;
 
+import java.net.HttpURLConnection;
 import java.util.List;
 
 import retrofit2.Call;
@@ -38,6 +40,9 @@ public class ArticleListActivity extends AppCompatActivity {
      */
     private boolean mTwoPane;
 
+    private RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeRefreshLayout;
+
     private final static String API_KEY = null; // TODO
     private final static String TAG = "ArticleListActivity";
 
@@ -59,7 +64,7 @@ public class ArticleListActivity extends AppCompatActivity {
             }
         });
 
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.article_list);
+        recyclerView = (RecyclerView) findViewById(R.id.article_list);
         assert recyclerView != null;
 
         //recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -80,6 +85,20 @@ public class ArticleListActivity extends AppCompatActivity {
             return;
         }
 
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+
+        refreshItems();
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Refresh items
+                refreshItems();
+            }
+        });
+    }
+
+    void refreshItems() {
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
@@ -88,10 +107,12 @@ public class ArticleListActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ArticleResponse>call, Response<ArticleResponse> response) {
                 int statusCode = response.code();
-                List<Article> articles = response.body().getArticles();
-                Log.d(TAG, "Number of movies received: " + articles.size());
-                //recyclerView.setAdapter(new MoviesAdapter(movies, R.layout.list_item_movie, getApplicationContext()));
-                recyclerView.setAdapter(new ArticleRecyclerViewAdapter(articles));
+                if(statusCode == HttpURLConnection.HTTP_OK) {
+                    List<Article> articles = response.body().getArticles();
+                    Log.d(TAG, "Number of movies received: " + articles.size());
+                    //recyclerView.setAdapter(new MoviesAdapter(movies, R.layout.list_item_movie, getApplicationContext()));
+                    recyclerView.setAdapter(new ArticleRecyclerViewAdapter(articles));
+                }
             }
 
             @Override
@@ -100,6 +121,13 @@ public class ArticleListActivity extends AppCompatActivity {
                 Log.e(TAG, t.toString());
             }
         });
+
+        onItemsLoadComplete();
+    }
+
+    void onItemsLoadComplete() {
+        // TODO: update adapter, notify data set changed?
+        swipeRefreshLayout.setRefreshing(false);
     }
 
 }
