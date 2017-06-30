@@ -30,6 +30,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.scrpn.mostviewedarticles.ArticleListActivity" />
         </activity>
+        <activity android:name=".AboutActivity"></activity>
     </application>
 
 </manifest>

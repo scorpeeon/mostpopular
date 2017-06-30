@@ -1,5 +1,6 @@
 package com.scrpn.mostviewedarticles;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -43,13 +44,15 @@ public class ArticleListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private final static String API_KEY = ""; // TODO
     private final static String TAG = "ArticleListActivity";
+    private static String API_KEY = ""; // TODO
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article_list);
+
+        API_KEY = getResources().getString(R.string.nytimes_api_key);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -59,8 +62,8 @@ public class ArticleListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(ArticleListActivity.this, AboutActivity.class);
+                startActivity(intent);
             }
         });
 
