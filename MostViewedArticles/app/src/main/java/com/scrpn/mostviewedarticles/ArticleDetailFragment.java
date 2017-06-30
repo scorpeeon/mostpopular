@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.scrpn.mostviewedarticles.dummy.DummyContent;
+import com.scrpn.mostviewedarticles.model.Article;
+
+import java.util.Date;
 
 /**
  * A fragment representing a single Article detail screen.
@@ -22,12 +24,15 @@ public class ArticleDetailFragment extends Fragment {
      * The fragment argument representing the item ID that this fragment
      * represents.
      */
-    public static final String ARG_ITEM_ID = "item_id";
+    public static final String ARG_ARTICLE_URL = "article_url";
+    public static final String ARG_ARTICLE_TITLE = "article_title";
+    public static final String ARG_ARTICLE_ABSTRACT = "article_abstract";
+    public static final String ARG_ARTICLE_DATE = "article_date";
 
     /**
      * The dummy content this fragment is presenting.
      */
-    private DummyContent.DummyItem mItem;
+    private Article article;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -40,17 +45,13 @@ public class ArticleDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
+        if (getArguments().containsKey(ARG_ARTICLE_URL) && getArguments().containsKey(ARG_ARTICLE_TITLE) &&
+                getArguments().containsKey(ARG_ARTICLE_ABSTRACT) && getArguments().containsKey(ARG_ARTICLE_DATE)) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
-
-            Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.content);
-            }
+            article = new Article(getArguments().getString(ARG_ARTICLE_URL), getArguments().getString(ARG_ARTICLE_TITLE),
+                    getArguments().getString(ARG_ARTICLE_ABSTRACT), (Date)getArguments().getSerializable(ARG_ARTICLE_DATE));
         }
     }
 
@@ -60,8 +61,14 @@ public class ArticleDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.article_detail, container, false);
 
         // Show the dummy content as text in a TextView.
-        if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.article_detail)).setText(mItem.details);
+        if (article != null) {
+            ((TextView) rootView.findViewById(R.id.article_detail)).setText(article.getAbstractText());
+
+            Activity activity = this.getActivity();
+            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
+            if (appBarLayout != null) {
+                appBarLayout.setTitle(article.getTitle());
+            }
         }
 
         return rootView;

@@ -1,23 +1,26 @@
 package com.scrpn.mostviewedarticles;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Toast;
 
 
-import com.scrpn.mostviewedarticles.dummy.DummyContent;
+import com.scrpn.mostviewedarticles.model.Article;
+import com.scrpn.mostviewedarticles.model.ArticleResponse;
+import com.scrpn.mostviewedarticles.network.ApiClient;
+import com.scrpn.mostviewedarticles.network.ApiInterface;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * An activity representing a list of Articles. This activity
@@ -34,6 +37,9 @@ public class ArticleListActivity extends AppCompatActivity {
      * device.
      */
     private boolean mTwoPane;
+
+    private final static String API_KEY = null; // TODO
+    private final static String TAG = "ArticleListActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +59,11 @@ public class ArticleListActivity extends AppCompatActivity {
             }
         });
 
-        View recyclerView = findViewById(R.id.article_list);
+        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.article_list);
         assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+
+        //recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //setupRecyclerView((RecyclerView) recyclerView);
 
         if (findViewById(R.id.article_detail_container) != null) {
             // The detail container view will be present only in the
@@ -64,78 +72,34 @@ public class ArticleListActivity extends AppCompatActivity {
             // activity should be in two-pane mode.
             mTwoPane = true;
         }
-    }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
-    }
+        /////
 
-    public class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
-
-        private final List<DummyContent.DummyItem> mValues;
-
-        public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
-            mValues = items;
+        if (API_KEY.isEmpty()) {
+            Toast.makeText(getApplicationContext(), "Please obtain your API KEY first from themoviedb.org", Toast.LENGTH_LONG).show();
+            return;
         }
 
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.article_list_content, parent, false);
-            return new ViewHolder(view);
-        }
+        ApiInterface apiService =
+                ApiClient.getClient().create(ApiInterface.class);
 
-        @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
-
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mTwoPane) {
-                        Bundle arguments = new Bundle();
-                        arguments.putString(ArticleDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-                        ArticleDetailFragment fragment = new ArticleDetailFragment();
-                        fragment.setArguments(arguments);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.article_detail_container, fragment)
-                                .commit();
-                    } else {
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, ArticleDetailActivity.class);
-                        intent.putExtra(ArticleDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-
-                        context.startActivity(intent);
-                    }
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return mValues.size();
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public final TextView mIdView;
-            public final TextView mContentView;
-            public DummyContent.DummyItem mItem;
-
-            public ViewHolder(View view) {
-                super(view);
-                mView = view;
-                mIdView = (TextView) view.findViewById(R.id.id);
-                mContentView = (TextView) view.findViewById(R.id.content);
+        Call<ArticleResponse> call = apiService.getArticles("all-sections", 7, API_KEY);
+        call.enqueue(new Callback<ArticleResponse>() {
+            @Override
+            public void onResponse(Call<ArticleResponse>call, Response<ArticleResponse> response) {
+                int statusCode = response.code();
+                List<Article> articles = response.body().getArticles();
+                Log.d(TAG, "Number of movies received: " + articles.size());
+                //recyclerView.setAdapter(new MoviesAdapter(movies, R.layout.list_item_movie, getApplicationContext()));
+                recyclerView.setAdapter(new ArticleRecyclerViewAdapter(articles));
             }
 
             @Override
-            public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
+            public void onFailure(Call<ArticleResponse>call, Throwable t) {
+                // Log error here since request failed
+                Log.e(TAG, t.toString());
             }
-        }
+        });
     }
+
 }

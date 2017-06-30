@@ -1,6 +1,7 @@
 package com.scrpn.mostviewedarticles;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -26,15 +27,6 @@ public class ArticleDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -54,14 +46,33 @@ public class ArticleDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(ArticleDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(ArticleDetailFragment.ARG_ITEM_ID));
+            arguments.putString(ArticleDetailFragment.ARG_ARTICLE_URL,
+                    getIntent().getStringExtra(ArticleDetailFragment.ARG_ARTICLE_URL));
+            arguments.putString(ArticleDetailFragment.ARG_ARTICLE_TITLE,
+                    getIntent().getStringExtra(ArticleDetailFragment.ARG_ARTICLE_TITLE));
+            arguments.putString(ArticleDetailFragment.ARG_ARTICLE_ABSTRACT,
+                    getIntent().getStringExtra(ArticleDetailFragment.ARG_ARTICLE_ABSTRACT));
+            arguments.putSerializable(ArticleDetailFragment.ARG_ARTICLE_DATE,
+                    getIntent().getSerializableExtra(ArticleDetailFragment.ARG_ARTICLE_DATE));
             ArticleDetailFragment fragment = new ArticleDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.article_detail_container, fragment)
                     .commit();
         }
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = getIntent().getStringExtra(ArticleDetailFragment.ARG_ARTICLE_URL);
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+//                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+            }
+        });
     }
 
     @Override
