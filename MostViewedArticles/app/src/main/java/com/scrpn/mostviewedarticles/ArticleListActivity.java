@@ -43,7 +43,7 @@ public class ArticleListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private final static String API_KEY = null; // TODO
+    private final static String API_KEY = ""; // TODO
     private final static String TAG = "ArticleListActivity";
 
     @Override
