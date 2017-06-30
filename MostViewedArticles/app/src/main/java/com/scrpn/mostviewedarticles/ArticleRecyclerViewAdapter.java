@@ -45,7 +45,10 @@ public class ArticleRecyclerViewAdapter extends RecyclerView.Adapter<ArticleRecy
         }
         holder.titleView.setText(articles.get(position).getTitle());
         holder.bylineView.setText(articles.get(position).getByLine());
-        holder.dateView.setText(articles.get(position).getPublishedDate().toString());
+
+        android.text.format.DateFormat df = new android.text.format.DateFormat();
+        String formattedDate =  android.text.format.DateFormat.format("yyyy-MM-dd", articles.get(position).getPublishedDate()).toString();
+        holder.dateView.setText(formattedDate);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

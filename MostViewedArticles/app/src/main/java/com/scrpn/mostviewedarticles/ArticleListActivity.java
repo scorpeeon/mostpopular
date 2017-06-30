@@ -127,7 +127,6 @@ public class ArticleListActivity extends AppCompatActivity {
     }
 
     void onItemsLoadComplete() {
-        // TODO: update adapter, notify data set changed?
         swipeRefreshLayout.setRefreshing(false);
     }
 
